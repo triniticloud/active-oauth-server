@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<head>
+  <meta charset="UTF-8">
+  <title>OAuth2 User preferences Setup</title>
+  <style>
+     html,
+body {
+    -webkit-overflow-scrolling: touch !important;
+    -webkit-font-smoothing: antialiased;
+    shape-rendering: crispEdges;
+}
+
+.alert-danger {
+    background-color: rgba(64, 64, 64, 0.7);
+    border: 0px;
+    color: #fff;
+}
+.timeline-item {
+    background: #fff;
+    border-radius: 3px;
+    padding: 15px;
+    margin: 0 auto;
+    max-width: 472px;
+    min-height: 200px;
+    overflow: scroll;
+}
+
+a {
+    color: var(--primary-color)!important;
+    text-decoration: none;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:active {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:focus {
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.animated-background {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+    height: 120px;
+    position: relative;
+}
+
+.background-masker {
+    background: #fff;
+    position: absolute;
+    padding-top: 7px;
+    line-height: 22px;
+}
+
+
+/* Every thing below this is just positioning */
+
+.background-masker.header-top,
+.background-masker.header-bottom,
+.background-masker.subheader-bottom {
+    top: 0;
+    left: 40px;
+    right: 0;
+    height: 10px;
+}
+
+.background-masker.header-left,
+.background-masker.subheader-left,
+.background-masker.header-right,
+.background-masker.subheader-right {
+    top: 0px;
+    left: 40px;
+    height: 18px;
+    width: 10px;
+}
+
+.background-masker.header-bottom {
+    top: 11px;
+    height: 20px;
+    width: 87%;
+}
+
+.background-masker.subheader-left,
+.background-masker.subheader-right {
+    top: 18px;
+    height: 22px;
+}
+
+.background-masker.header-right,
+.background-masker.subheader-right {
+    width: auto;
+    left: 300px;
+    right: 0;
+}
+
+.background-masker.subheader-right {
+    left: 230px;
+    height: 16px;
+    top: 20%;
+}
+
+.background-masker.subheader-bottom {
+    top: 10px;
+    height: 10px;
+}
+
+.background-masker.content-top,
+.background-masker.content-second-line,
+.background-masker.content-third-line,
+.background-masker.content-second-end,
+.background-masker.content-third-end,
+.background-masker.content-first-end {
+    top: 40px;
+    left: 0;
+    right: 0;
+    height: 6px;
+    line-height: 25px;
+}
+
+.background-masker.content-top {
+    height: 20px;
+}
+
+.background-masker.content-first-end,
+.background-masker.content-second-end,
+.background-masker.content-third-end {
+    width: auto;
+    left: 380px;
+    right: 0;
+    top: 60px;
+    height: 8px;
+}
+
+.background-masker.content-second-line {
+    top: 68px;
+    height: 17px;
+}
+
+.background-masker.content-second-end {
+    left: 420px;
+    top: 74px;
+}
+
+.background-masker.content-third-line {
+    top: 95px;
+    height: 15px;
+}
+
+.background-masker.content-third-end {
+    top: 91%;
+    width: 103px;
+    left: 72%;
+    height: 11px;
+}
+
+#contentLoader {
+    margin-top: 11%;
+}
+
+.loader {
+    cursor: none;
+    opacity: 0.5;
+}
+
+#loading {
+    display: none;
+}
+
+.loader #loading {
+    display: inline;
+}
+
+#loading {
+    margin: 0px 5px;
+}
+
+/* -- NEW LOGIN CSS STARTS */
+ .login-form .input-field {
+        position: relative;
+        margin-top: 3rem;
+    }
+
+    .login-form .input-field .prefix {
+        position: absolute;
+        width: 2.5rem;
+        font-size: 2rem;
+        transition-duration: 0.2s;
+        transition-timing-function: initial;
+        transition-delay: initial;
+        transition-property: color;
+        top: -0.8rem;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        background-color: transparent;
+        border-top-width: initial;
+        border-right-width: initial;
+        border-left-width: initial;
+        border-top-style: none;
+        border-right-style: none;
+        border-left-style: none;
+        border-top-color: initial;
+        border-right-color: initial;
+        border-left-color: initial;
+        border-image-source: initial;
+        border-image-slice: initial;
+        border-image-width: initial;
+        border-image-outset: initial;
+        border-image-repeat: initial;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: rgb(158, 158, 158);
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        border-bottom-left-radius: 0px;
+        outline-color: initial;
+        outline-style: none;
+        outline-width: initial;
+        height: 25px;
+        font-size: 15px;
+        margin-top: 15px;
+        margin-right: 0px;
+        margin-bottom: 10px;
+        margin-left: 0px;
+        padding-top: 0px;
+        padding-right: 0px;
+        padding-bottom: 0px;
+        box-shadow: none;
+        box-sizing: content-box;
+        color: #333333;
+    }
+
+    .login-form input[type="text"]:focus,
+    .login-form input[type="password"]:focus {
+        border-color: var(--primary-color);
+    }
+
+    .login-form .input-field .prefix~input,
+    .login-form .input-field .prefix~textarea {
+        padding-left: 2.5rem;
+        width: calc(100% - 2.5rem);
+    }
+
+    .login-form label {
+        font-size: 0.8rem;
+        color: rgb(158, 158, 158);
+    }
+
+    .login-form input[type="text"]:disabled+label,
+    .login-form input[type="text"][readonly="readonly"]+label,
+    .login-form input[type="password"]:disabled+label,
+    .login-form input[type="password"][readonly="readonly"]+label,
+    .login-form input[type="email"]:disabled+label,
+    .login-form input[type="email"][readonly="readonly"]+label,
+    .login-form input[type="url"]:disabled+label,
+    .login-form input[type="url"][readonly="readonly"]+label,
+    .login-form input[type="time"]:disabled+label,
+    .login-form input[type="time"][readonly="readonly"]+label,
+    .login-form input[type="date"]:disabled+label,
+    .login-form input[type="date"][readonly="readonly"]+label,
+    .login-form input[type="datetime-local"]:disabled+label,
+    .login-form input[type="datetime-local"][readonly="readonly"]+label,
+    .login-form input[type="tel"]:disabled+label,
+    .login-form input[type="tel"][readonly="readonly"]+label,
+    .login-form input[type="number"]:disabled+label,
+    .login-form input[type="number"][readonly="readonly"]+label,
+    .login-form input[type="search"]:disabled+label,
+    .login-form input[type="search"][readonly="readonly"]+label {
+        color: rgba(0, 0, 0, 0.26);
+    }
+    .login-form .input-field label {
+        color: rgb(158, 158, 158);
+        position: absolute;
+        top: -1rem;
+        left: 0;
+        cursor: text;
+        font-size: 14px;
+        font-weight: 400;
+        color: #888888;
+    }
+
+    .login-form .input-field .prefix~label {
+        margin-left: 2.5rem;
+        margin-top: 3%;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .login-form .input-field .prefix img {
+        width: 30px;
+        height: 20px;
+    }
+
+    .login-form .bank-login-btn {
+        border-radius: 100px;
+        background-color: #183d44;
+        border-color: #183d44;
+        margin-top: 20px;
+        position: relative;
+        width: 100%;
+        font: inherit;
+        padding: 10px;
+        cursor: pointer;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+
+    .login-form .bank-login-btn .btnloader
+    {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .login-form .bank-login-btn:focus,
+    .login-form .bank-login-btn:hover,
+    .login-form .bank-login-btn:hover:focus {
+        border-radius: 100px;
+        background-color: #183d44;
+        border-color: #183d44;
+        outline: none;
+    }
+/* Change autocomplete styles in WebKit */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus
+  input:-webkit-autofill, 
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+      background-color: rgb(255, 255, 255) !important;
+    transition: background-color 5000s ease-in-out 0s !important;
+  }
+  #chatBoxContainer
+  {
+      position: relative;
+  }
+  #pref-page{
+    display: none !important;
+    flex-direction: column;
+    align-items: center;
+  }
+  .bank-logo-container {
+    padding: 6%;
+    background-color: #183d44;
+    border-radius: 50px;
+    display: flex;
+    justify-content: center;
+  }
+  .bank-logo {
+    width: 70px;
+  }
+  #netBanking{
+    width: 100%;
+  }
+    </style>
+  <script>
+    var queryParams = {};
+    if (window.location.href.split("?")[1]) {
+      var queryString = window.location.href.split("?")[1];
+      var queryValues = queryString.split("&")
+      queryValues.forEach(function (value) {
+        var result = value.split("=");
+        if (result) {
+          queryParams[result[0]] = result[1]
+        }
+      })
+    }
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.status === 200 && xhr.readyState === 4) {
+        var response = JSON.parse(xhr.responseText).response;
+        var link = document.createElement('link');
+        link.id = 'id2';
+        link.rel = 'stylesheet';
+        link.href = response.config.themeCss.webview;
+        link.onload = function () {
+          document.querySelector('#contentLoader').style.setProperty('display', 'none', 'important');
+          document.getElementById("chatBoxContainer").classList.remove("animated-background");
+          document.querySelector('#pref-page').style.setProperty('display', 'flex', 'important');
+        }
+        document.head.appendChild(link);
+        if (response.config && (response.config.template !== 'template2')) {
+          document.getElementById("pref").placeholder = "Email";
+        }
+        document.documentElement.style.setProperty('--primary-color', response.config.color);
+        document.getElementById("bank-logo").src = 'https://s3-ap-southeast-1.amazonaws.com/triniti-ai/' + response.config.iconKey;
+      } else {
+          document.querySelector('#contentLoader').style.setProperty('display', 'none', 'important');
+          document.getElementById("chatBoxContainer").classList.remove("animated-background");
+          document.querySelector('#pref-page').style.setProperty('display', 'flex', 'important');
+      }
+    };
+    xhr.open('GET', 'https://' + queryParams.botDomain + '/portal/api/bot/' + queryParams.botCode + '/config');
+    xhr.send();
+    function onSubmit() {
+      if (document.getElementById("pref").value) {
+        var element = document.getElementById("prefsubmit");
+        element.classList.add("loader");
+      }
+    }
+  </script>
+  </script>
+</head>
+
+<body class="timeline-item">
+  <form th:action="@{/savepref}" th:object="${ProfileResponse}" method="post" class="login-form">
+    <div id="chatBoxContainer" class="animated-background">
+        <div id="contentLoader">
+          <div class="background-masker header-left"></div>
+          <div class="background-masker header-right"></div>
+          <div class="background-masker header-bottom"></div>
+          <div class="background-masker subheader-left"></div>
+          <div class="background-masker subheader-right"></div>
+          <div class="background-masker subheader-bottom"></div>
+          <div class="background-masker content-top"></div>
+          <div class="background-masker content-first-end"></div>
+          <div class="background-masker content-second-line"></div>
+          <div class="background-masker content-second-end"></div>
+          <div class="background-masker content-third-line"></div>
+          <div class="background-masker content-third-end"></div>
+        </div>
+      </div>
+      <div class="tab-content" id="pref-page">
+        <div class="bank-logo-container">
+            <img alt="bank-logo" src="https://s3-ap-southeast-1.amazonaws.com/bizapps-admin/assets/active.png" class="bank-logo" id="bank-logo" />
+        </div>
+        <div role="tabpanel" class="tab-pane fade in active" id="netBanking">
+          <div class="active" data-tabName="netBanking">
+            <div class="input-field">
+              <i class="prefix"><img class="change-active-user" src="https://bizapps-admin.s3-ap-southeast-1.amazonaws.com/assets/email-envelope.png" width="20"> </i>
+              <input type="text" id="pref" name="pref" value="" autocorrect="off" autocapitalize="off"
+                autocomplete="off" autofocus required />
+              <label for="pref" class="center-align">Email</label>
+            </div>
+          </div>
+        </div>
+        <button id="prefsubmit" type="submit" data-button-lifecycle="{{allowMultipleClicks}}" data-radio="{{radio}}"
+          onclick="onSubmit(event)" name="prefsubmit" class="btn btn-primary btn-block bank-login-btn" value="Login"
+          data-style="expand-left">
+          Submit
+          <span class="btnloader">
+            <svg id="loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="12" height="12" fill="white">
+              <path opacity=".1" d="M14 0 H18 V8 H14 z" transform="rotate(0 16 16)">
+                <animate attributeName="opacity" from="1" to=".1" dur="1s" repeatCount="indefinite" begin="0" />
+              </path>
+              <path opacity=".1" d="M14 0 H18 V8 H14 z" transform="rotate(45 16 16)">
+                <animate attributeName="opacity" from="1" to=".1" dur="1s" repeatCount="indefinite" begin="0.125s" />
+              </path>
+              <path opacity=".1" d="M14 0 H18 V8 H14 z" transform="rotate(90 16 16)">
+                <animate attributeName="opacity" from="1" to=".1" dur="1s" repeatCount="indefinite" begin="0.25s" />
+              </path>
+              <path opacity=".1" d="M14 0 H18 V8 H14 z" transform="rotate(135 16 16)">
+                <animate attributeName="opacity" from="1" to=".1" dur="1s" repeatCount="indefinite" begin="0.375s" />
+              </path>
+              <path opacity=".1" d="M14 0 H18 V8 H14 z" transform="rotate(180 16 16)">
+                <animate attributeName="opacity" from="1" to=".1" dur="1s" repeatCount="indefinite" begin="0.5s" />
+              </path>
+              <path opacity=".1" d="M14 0 H18 V8 H14 z" transform="rotate(225 16 16)">
+                <animate attributeName="opacity" from="1" to=".1" dur="1s" repeatCount="indefinite" begin="0.675s" />
+              </path>
+              <path opacity=".1" d="M14 0 H18 V8 H14 z" transform="rotate(270 16 16)">
+                <animate attributeName="opacity" from="1" to=".1" dur="1s" repeatCount="indefinite" begin="0.75s" />
+              </path>
+              <path opacity=".1" d="M14 0 H18 V8 H14 z" transform="rotate(315 16 16)">
+                <animate attributeName="opacity" from="1" to=".1" dur="1s" repeatCount="indefinite" begin="0.875s" />
+              </path>
+            </svg>
+          </span>
+        </button>
+  </form>
+
+</body>
+
+</html>
